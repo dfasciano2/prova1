@@ -1509,7 +1509,10 @@ transient - A keyword in the Java programming language that indicates that a fie
 				int n=0;
 
 				for (int c=0; c< currentPlayer.getNoTerritoriesOwned() ; c++) {
-					if ( ((Country)((Vector)currentPlayer.getTerritoriesOwned()).elementAt(c)).getArmies() >= m.getNoofarmies() ) n++;
+					while ( ((Country)((Vector)currentPlayer.getTerritoriesOwned()).elementAt(c)).getArmies() >= m.getNoofarmies() )
+						{n++;
+						break;
+						}
 
 				}
 				if (n >= m.getNoofcountries() ) {
@@ -1714,17 +1717,19 @@ transient - A keyword in the Java programming language that indicates that a fie
 					int x = Integer.parseInt(st.nextToken());
 					int y = Integer.parseInt(st.nextToken());
 
-					if ( st.hasMoreTokens() ) { throw new Exception("unknown item found in map file: "+ st.nextToken() ); }
-					if ( ++countryCount != color ) { throw new Exception("unexpected number found in map file: "+color ); }
+					while( st.hasMoreTokens() ) { throw new Exception("unknown item found in map file: "+ st.nextToken() ); }
+					while ( ++countryCount != color ) { throw new Exception("unexpected number found in map file: "+color ); }
 
 					Country country;
-					if (cleanLoad) {
+					while (cleanLoad) {
 						country = new Country();
 						Countries.add(country);
 						((Continent)Continents.elementAt( continent - 1 )).addTerritoriesContained(country);
+						break;
 					}
-                                        else {
+					while(!cleanLoad){
 						country = (Country)Countries.get(color -1);
+						break;
 					}
 
 					country.setColor(color);
@@ -1748,21 +1753,13 @@ transient - A keyword in the Java programming language that indicates that a fie
 
 					mode = input.substring(1, input.length()-1); // set mode to the name of the section
 
-					if (mode.equals("files") ) {
+					while (mode.equals("files") ) {
 						//System.out.print("Section: files found\n"); // testing
 						ImagePic=null;
 						ImageMap=null;
+						break;
 					}
-					else if (mode.equals("continents") ) {
-						//System.out.print("Section: continents found\n"); // testing
-					}
-					else if (mode.equals("countries") ) {
-						//System.out.print("Section: countries found\n"); // testing
-					}
-					else if (mode.equals("borders") ) {
-						//System.out.print("Section: borders found\n"); // testing
-					}
-					else {
+					while(!(mode.equals("files")){
 						throw new Exception("unknown section found in map file: "+mode);
 					}
 
@@ -2054,15 +2051,17 @@ transient - A keyword in the Java programming language that indicates that a fie
 
                                             String oldkey ="PLAYER"+s1;
                                             String newkey = "{"+oldkey+"}";
-                                            if (description.indexOf(newkey) >= 0) {
+                                           while (description.indexOf(newkey) >= 0) {
                                                 // DefaultCards_XX.properties uses this format
                                                 description = RiskUtil.replaceAll(description, newkey, name );
+                                                break;
                                             }
-                                            else if (description.indexOf(oldkey) >= 0) {
+                                            while (description.indexOf(oldkey) >= 0) {
                                                 // many maps still have this format for missions
                                                 description = RiskUtil.replaceAll(description, oldkey, name );
+                                                break;
                                             }
-                                            else {
+                                           while ((!(description.indexOf(oldkey) >= 0))&& (!(description.indexOf(newkey) >= 0))){
                                                 System.err.println("newkey: "+newkey+" and oldkey: "+oldkey+" not found in mission: "+description);
                                             }
 
