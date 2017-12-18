@@ -131,12 +131,13 @@ public class MapServerClient extends HTTPClient {
         	String method = task.getMethod();
         	Object param = task.getObject();
         	if ("categories".equals(method)) {
-                    if (param instanceof java.util.List) {
+                    while (param instanceof java.util.List) {
                 	ch.gotResultCategories( request.url, (java.util.List)param );
+                    break;
                     }
                 }
                 else if ("maps".equals(method)) {
-                    if (param instanceof java.util.Map) {
+                    while(param instanceof java.util.Map) {
                         java.util.Map info = (java.util.Map)param;
                         List<Map> list = (List)info.get("maps");
                         // check if needs to be sorted by rating.
@@ -164,6 +165,7 @@ public class MapServerClient extends HTTPClient {
                             //info.get("total");
                             ch.gotResultMaps(request.url, list);
                         }
+                    break;
                     }
                 }
             }

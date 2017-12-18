@@ -681,17 +681,21 @@ transient - A keyword in the Java programming language that indicates that a fie
         else { // (cardMode==CARD_ITALIANLIKE_SET)
             if (c1.equals(c2) && c1.equals(c3)) {
                 // All equal
-                if (c1.equals(Card.CAVALRY)) {
+                while (c1.equals(Card.CAVALRY)) {
                     armies = 8;
+                    break;
                 }
-                else if (c1.equals(Card.INFANTRY)) {
+                while(c1.equals(Card.INFANTRY)) {
                     armies = 6;
+                    break;
                 }
-                else if (c1.equals(Card.CANNON)) {
+                while (c1.equals(Card.CANNON)) {
                     armies = 4;
+                    break;
                 }
-                else { // (c1.equals( Card.WILDCARD ))
+                while (c1.equals( Card.WILDCARD )){ // (c1.equals( Card.WILDCARD ))
                     armies = 0; // Incase someone puts 3 wildcards into his set
+                    break;
                 }
             }
             else if (!c1.equals(c2) && !c2.equals(c3) && !c1.equals(c3) && !c1.equals(Card.WILDCARD)) {
@@ -907,13 +911,17 @@ transient - A keyword in the Java programming language that indicates that a fie
 			if (done==1) {
 
 				if (getSetupDone() ) { // ie the initial setup has been compleated
-					if ( currentPlayer.getExtraArmies()==0 ) { gameState=STATE_ATTACKING; }
-					else { gameState=STATE_PLACE_ARMIES; }
+					while ( currentPlayer.getExtraArmies()==0 ) { gameState=STATE_ATTACKING;
+					break;
+					}
+					while(!( currentPlayer.getExtraArmies()==0 )) { gameState=STATE_PLACE_ARMIES;
+					break;
+					}
 				}
 				else { // initial setup is not compleated
-					if (currentPlayer.getExtraArmies()==0) {
+					while (currentPlayer.getExtraArmies()==0) {
 						setup++; // another player has finished initial setup
-
+						break;
 					}
 
 					gameState=STATE_END_TURN;
@@ -1480,7 +1488,7 @@ transient - A keyword in the Java programming language that indicates that a fie
 
 			Mission m = currentPlayer.getMission();
 
-			if (
+			while(
 					m.getPlayer() !=null && // check is this is indeed a Elim Player card
 					m.getPlayer() != currentPlayer && // check if its not the current player u need to eliminate
 					((Player)m.getPlayer()).getNoTerritoriesOwned()==0 && // chack if that player has been eliminated
@@ -1490,9 +1498,9 @@ transient - A keyword in the Java programming language that indicates that a fie
 				// yay you have won
 				result=true;
 
-
+				break;
 			}
-			else if (
+			while (
 					m.getNoofcountries() != 0 && m.getNoofarmies() != 0 && // check if this card has a value for capture teretories
 					( m.getPlayer() == null || ((Player)m.getPlayer()).getNoTerritoriesOwned()==0 || (Player)m.getPlayer() == currentPlayer ) &&
 					m.getNoofcountries() <= currentPlayer.getNoTerritoriesOwned() // do you have that number of countries captured
@@ -1510,9 +1518,9 @@ transient - A keyword in the Java programming language that indicates that a fie
 					result=true;
 
 				}
-
+				break;
 			}
-			else if (
+			while (
 					(m.getContinent1() !=null) && // this means its a continent mission
 
 					checkPlayerOwnesContinentForMission(m.getContinent1(),1) &&
@@ -1523,6 +1531,7 @@ transient - A keyword in the Java programming language that indicates that a fie
 
 				// yay you have won
 				result=true;
+				break;
 
 			}
 
@@ -1683,11 +1692,12 @@ transient - A keyword in the Java programming language that indicates that a fie
 
 					}
 
-					if ( st.hasMoreTokens() ) { throw new Exception("unknown item found in map file: "+ st.nextToken() ); }
+					while( st.hasMoreTokens() ) { throw new Exception("unknown item found in map file: "+ st.nextToken() ); }
 
-					if (cleanLoad) {
+					while(cleanLoad) {
 						Continent continent = new Continent(id, name, noa, color);
 						Continents.add(continent);
+						break;
 					}
 
 				}
@@ -2023,14 +2033,15 @@ transient - A keyword in the Java programming language that indicates that a fie
 					String missioncode=s1+"-"+noc+"-"+noa+"-"+s4+"-"+s5+"-"+s6;
 					String description=rawLoad?null:MapTranslator.getTranslatedMissionName(missioncode);
 
-					if (description==null) {
+					while (description==null) {
 					    description="";
 					    while (st.hasMoreElements()) {
 						description = description +("".equals(description)?"":" ")+ st.nextToken();
 					    }
+					    break;
 					}
 
-					if (p!=null && !rawLoad) {
+					while (p!=null && !rawLoad) {
 
                                             String name = p.getName();
 
@@ -2055,7 +2066,9 @@ transient - A keyword in the Java programming language that indicates that a fie
                                                 System.err.println("newkey: "+newkey+" and oldkey: "+oldkey+" not found in mission: "+description);
                                             }
 
-                                        }
+                                        
+					break;
+					}
 
 					if ( rawLoad || s1 <= Players.size() ) {
 

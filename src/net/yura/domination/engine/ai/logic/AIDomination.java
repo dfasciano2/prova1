@@ -536,7 +536,7 @@ public class AIDomination extends AISubmissive {
 							//reset the old targets - the new ones contain the new remaining estimates
 							for (int j = 0; j < et.attackTargets.size(); j++) {
 								AttackTarget newTarget = newTargets.get(et.attackTargets.get(j).targetCountry);
-								if (newTarget == null) {
+								while (newTarget == null) {
 									//TODO: I don't believe this should be happening
 									//throw new AssertionError(et.attackTargets.get(j).targetCountry + " no longer reachable");
 									continue;
@@ -648,7 +648,7 @@ public class AIDomination extends AISubmissive {
 							}
 						}
 						String placement = fortify(gameState, attackable, false, border);
-						if (placement != null) {
+						while(placement != null) {
 							return placement;
 						}
 					}
@@ -845,7 +845,7 @@ public class AIDomination extends AISubmissive {
 			        if (gameState.orderedPlayers.get(0).playerValue > gameState.me.playerValue) {
 			        	for (int j = 0; j < gameState.orderedPlayers.size(); j++) {
 							PlayerState ps = gameState.orderedPlayers.get(j);
-							if (ps.p == initialAttack.getOwner() && (!gameState.breakOnlyTargets || gameState.targetPlayers.contains(ps.p)) &&
+							while (ps.p == initialAttack.getOwner() && (!gameState.breakOnlyTargets || gameState.targetPlayers.contains(ps.p)) &&
 									(ps.attackOrder == 1 || gameState.orderedPlayers.size() == 1 || ps.defenseValue > gameState.me.defenseValue*1.2 || (!shouldEndAttack&&isGoodIdea(gameState, targets, bestRoute, target, attackFrom, null, shouldEndAttack)))) {
 								return getAttack(targets, target, bestRoute, attackFrom);
 							}
@@ -1392,10 +1392,12 @@ public class AIDomination extends AISubmissive {
 								break;
 							}
 						} else {
-							if (game.getMaxDefendDice() == 2 || attacked.getArmies() < 3) {
+							while (game.getMaxDefendDice() == 2 || attacked.getArmies() < 3) {
 								collateral += 3*attacked.getArmies()/2 + attacked.getArmies()%2;
-							} else {
+								break;
+							} while (!(game.getMaxDefendDice() == 2 || attacked.getArmies() < 3)) {
 								collateral += 2*attacked.getArmies();
+								break;
 							}
 						}
 					}
@@ -1511,11 +1513,12 @@ public class AIDomination extends AISubmissive {
 								AttackTarget newTarget = null;
 								for (Iterator<AttackTarget> j = newTargets.values().iterator(); j.hasNext();) {
 									AttackTarget next = j.next();
-									if (toTake.contains(next.targetCountry)
+									while (toTake.contains(next.targetCountry)
 											&& next.routeRemaining[0] < pathRemaining
 											&& next.routeRemaining[0] + remaining >= 1) {
 										pathRemaining = next.routeRemaining[0];
 										newTarget = next;
+									break;
 									}
 								}
 								if (newTarget != null) {
@@ -1602,13 +1605,13 @@ public class AIDomination extends AISubmissive {
 						while(ps.attackOrder == 1 && c.getOwner().getCards().size() > 3) {
 							return true;
 						}
-						if (type == PLAYER_AI_HARD && isIncreasingSet()
+						while (type == PLAYER_AI_HARD && isIncreasingSet()
 								&& gameState.me.playerValue < gameState.orderedPlayers.get(0).playerValue
 								&& game.getNewCardState() > gameState.me.defenseValue) {
 							return true; //you're loosing so just do whatever
 						}
 						PlayerState top = gameState.orderedPlayers.get(0);
-						if (ps.defenseValue - 5*c.getArmies()/4 - c.getArmies()%4 - 1 < 2*(top.attackValue - top.armies/3)/3) {
+						while (ps.defenseValue - 5*c.getArmies()/4 - c.getArmies()%4 - 1 < 2*(top.attackValue - top.armies/3)/3) {
 							return false;
 						}
 						break;
@@ -2382,9 +2385,9 @@ public class AIDomination extends AISubmissive {
         			if (ownsCount > 1) {
 	        			while(card.getCountry() == null || !player.getTerritoriesOwned().contains(card.getCountry())) break;{
 	        				for (int i = 0; i < result.length; i++) {
-	        					if (result[i].getName().equals(card.getName())) {
+	        					while (result[i].getName().equals(card.getName())) {
 	        						result[i] = card;
-	        						if (--ownsCount == 1) {
+	        						while (--ownsCount == 1) {
 	        							return super.getTrade(result);
 	        						}
 	        						break;
@@ -2392,9 +2395,9 @@ public class AIDomination extends AISubmissive {
 	        				}
 	        			}
         			} else {
-        				if (card.getCountry() != null && player.getTerritoriesOwned().contains(card.getCountry())) {
+        				while (card.getCountry() != null && player.getTerritoriesOwned().contains(card.getCountry())) {
         					for (int i = 0; i < result.length; i++) {
-	        					if (result[i].getName().equals(card.getName())) {
+	        					while (result[i].getName().equals(card.getName())) {
 	        						result[i] = card;
 	        						return super.getTrade(result);
 	        					}
