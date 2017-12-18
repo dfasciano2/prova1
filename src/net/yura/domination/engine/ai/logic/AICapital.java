@@ -120,7 +120,7 @@ public class AICapital extends AIDomination {
 							while (myowned < 2) {
 								//can we take one - TODO: coordinate with break continent
 								String result = planCapitalMove(attack, attackable, gameState, targets, e.getKey(), false, allCountriesTaken, !highProbability, shouldEndAttack);
-								if (result != null) {
+								while(result != null) {
 									return result;
 								}
 								break;

@@ -381,18 +381,20 @@ public class Risk extends Thread {
 
             // CLOSE GAME
             while (input.equals("closegame")) {
-                if (!StringT.hasMoreTokens()) {
+                while (!StringT.hasMoreTokens()) {
                     closeGame();
                     output=resb.getString("core.close.closed");
+                    break;
                 }
-                else {
+                while (!StringT.hasMoreTokens()) {
                     output=RiskUtil.replaceAll( resb.getString( "core.error.syntax"), "{0}", "closegame");
+                    break;
                 }
                 break;
             }
             // SAVE GAME
             while(input.equals("savegame")) {
-                if (StringT.countTokens() >= 1) {
+                while (StringT.countTokens() >= 1) {
                     if ( unlimitedLocalMode ) {
 
                         String filename = RiskUtil.getAtLeastOne(StringT);
@@ -411,14 +413,17 @@ public class Risk extends Thread {
                     else {
                         output = resb.getString( "core.save.error.unable" );
                     }
+                    break;
                 }
-                else { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "savegame filename");
-               }
+                while (!(StringT.countTokens() >= 1))
+                { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "savegame filename");
+                	break;
+                	}
                 break;
             }
             // REPLAY A GAME FROM THE GAME FILE
             while(input.equals("replay")) {
-                if ( StringT.hasMoreTokens()==false ) {
+                while( StringT.hasMoreTokens()==false ) {
                     if ( unlimitedLocalMode ) {
                     	/*
                     	 * try not use
@@ -455,6 +460,7 @@ public class Risk extends Thread {
                     else {
                         output="can only replay local games";
                     }
+                    break;
                 }
                 else { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "replay"); }
                 break;
@@ -529,18 +535,21 @@ public class Risk extends Thread {
                     output=resb.getString( "core.loadgame.loaded");
 
                     Player player = game.getCurrentPlayer();
-                    if ( player != null ) {
+                    	while ( player != null ) {
                         // the game is saved
                         saveGameToUndoObject();
                         output=output+ System.getProperty("line.separator") + resb.getString( "core.loadgame.currentplayer") + " " + player.getName();
-                    }
+                        break;
+                    	}
 
-                    if (game.getState()==RiskGame.STATE_NEW_GAME) {
+                    while (game.getState()==RiskGame.STATE_NEW_GAME) {
                         controller.newGame(true);
                         setupPreviews( doesMapHaveMission() );
+                        break;
                     }
-                    else {
+                    while (!(game.getState()==RiskGame.STATE_NEW_GAME) ){
                         controller.startGame(unlimitedLocalMode);
+                        break;
                     }
                 }
                 catch (Exception ex) {
@@ -781,7 +790,7 @@ public class Risk extends Thread {
 
                         output = output + patc.getName()+" ";
 
-                        if (game.getState() == RiskGame.STATE_NEW_GAME ) {
+                        while(game.getState() == RiskGame.STATE_NEW_GAME ) {
 
                             // should never return false
                             if ( game.delPlayer( patc.getName() ) ) {
@@ -792,26 +801,21 @@ public class Risk extends Thread {
 
                                 patc = null;
                             }
-
+                            break;
                         }
-                        else {
+                        while(!(game.getState() == RiskGame.STATE_NEW_GAME )) {
 
                             patc.setType( Player.PLAYER_AI_CRAP );
-
+                            break;
                         }
                         break;
                     }
 
                     if (patc!=null) {
 
-                        if (newPlayerAddress!=null) {
+                        while(newPlayerAddress!=null) {
                             patc.setAddress( newPlayerAddress );
-                        }
-                        else {
-
-                            // this means there are only spectators left
-                            // so nothing really needs to be done
-                            // game will stop, but hay there r no more players
+                            break;
                         }
                     }
 
@@ -2279,25 +2283,21 @@ public class Risk extends Thread {
                 // IF local game, OR addres match get input
                 while ( unlimitedLocalMode || ((Player)game.getCurrentPlayer()).getAddress().equals(myAddress) ) {
 
-                    if ( game.getState() == RiskGame.STATE_DEFEND_YOURSELF && game.getCurrentPlayer().getAutoDefend() ) {
+                    while( game.getState() == RiskGame.STATE_DEFEND_YOURSELF && game.getCurrentPlayer().getAutoDefend() ) {
 
                         parser( getBasicPassiveGo() );
-
+                        break;
                     }
 
                     // || ((Player)game.getCurrentPlayer()).getType()==Player.PLAYER_NEUTRAL
 
-                    else if ( ((Player)game.getCurrentPlayer()).getType()==Player.PLAYER_HUMAN ) {
+                    while ( ((Player)game.getCurrentPlayer()).getType()==Player.PLAYER_HUMAN ) {
 
                         controller.needInput( game.getState() );
-
+                        break;
                     }
-                    else {
-
                         ai.play(this);
-
-                    }
-                    break;
+                        break;
                 }
                 //else if ( game.getCurrentPlayer().getType()==Player.PLAYER_HUMAN ) {
 
