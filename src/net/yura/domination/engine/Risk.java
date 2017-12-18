@@ -14,6 +14,7 @@ import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.security.Key;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,9 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.crypto.Cipher;
+
 import net.yura.domination.engine.ai.AIManager;
 import net.yura.domination.engine.core.Card;
 import net.yura.domination.engine.core.Country;
@@ -81,9 +85,17 @@ public class Risk extends Thread {
 
         RiskGame.setDefaultMapAndCards(b,c);
     }
-
+    /**
+     * these are a three types of Level Array's String
+     */
     public static final String[] types = new String[] { "human","ai easy","ai easy","ai easy","ai average","ai average" };
+    /**
+     * Array of String about player
+     */
     public static final String[] names = new String[] { "player","bob","fred","ted","yura","lala"};
+    /**
+     * Array of String about colors
+     */
     public static final String[] colors = new String[] { "cyan","green","magenta","red","blue","yellow"};
 
     public Risk() {
@@ -368,7 +380,7 @@ public class Risk extends Thread {
             String output;
 
             // CLOSE GAME
-            if (input.equals("closegame")) {
+            while (input.equals("closegame")) {
                 if (!StringT.hasMoreTokens()) {
                     closeGame();
                     output=resb.getString("core.close.closed");
@@ -376,9 +388,10 @@ public class Risk extends Thread {
                 else {
                     output=RiskUtil.replaceAll( resb.getString( "core.error.syntax"), "{0}", "closegame");
                 }
+                break;
             }
             // SAVE GAME
-            else if (input.equals("savegame")) {
+            while(input.equals("savegame")) {
                 if (StringT.countTokens() >= 1) {
                     if ( unlimitedLocalMode ) {
 
@@ -399,12 +412,27 @@ public class Risk extends Thread {
                         output = resb.getString( "core.save.error.unable" );
                     }
                 }
-                else { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "savegame filename"); }
+                else { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "savegame filename");
+               }
+                break;
             }
             // REPLAY A GAME FROM THE GAME FILE
-            else if (input.equals("replay")) {
+            while(input.equals("replay")) {
                 if ( StringT.hasMoreTokens()==false ) {
                     if ( unlimitedLocalMode ) {
+                    	/*
+                    	 * try not use
+                    	 */
+                    	List replayCommands = game.getCommands();
+                        saveGameToUndoObject();
+                        game = new RiskGame();
+                        replay = true;
+                        for (Iterator e = replayCommands.iterator(); e.hasNext();) {
+                            inGameParser( (String)e.next() );
+                        }
+                        replay = false;
+                        output="replay of game finished";
+                    	/*
                         try {
                             List replayCommands = game.getCommands();
                             saveGameToUndoObject();
@@ -422,27 +450,32 @@ public class Risk extends Thread {
                             output="error with replay "+e;
                             RiskUtil.printStackTrace(e);
                         }
+                        */
                     }
                     else {
                         output="can only replay local games";
                     }
                 }
                 else { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "replay"); }
+                break;
             }
-            else if ( onlinePlayClient == null ) {
+            if ( onlinePlayClient == null ) {
                 inGameParser( myAddress+" "+message );
                 output=null;
+              
             }
             else {
                 // send to network
                 onlinePlayClient.sendUserCommand( message );
                 output=null;
+                
             }
 
-            if (output!=null) {
+            while (output!=null) {
                 controller.sendMessage("game>" + message, false, false);
                 controller.sendMessage(output, false, false);
                 getInput();
+                break;
             }
 
         }
@@ -457,37 +490,20 @@ public class Risk extends Thread {
         String output;
 
         controller.sendMessage(">" + message, false, false );
-
-        // NEW GAME
         if (input.equals("newgame")) {
 
             if (StringT.hasMoreTokens()==false) {
-
-                // already checked
-                //if (game == null) {
-
-                try {
-
-                    // CREATE A GAME
-                    game = new RiskGame();
-
-                    // NO SERVER OR CLIENT IS STARTED
-
-                    unlimitedLocalMode = true;
-
-                    controller.newGame(true);
-                    setupPreviews( doesMapHaveMission() );
-
-                    output=resb.getString( "core.newgame.created");
-                }
-                catch (Exception e) {
-                    RiskUtil.printStackTrace(e);
-                    output=resb.getString( "core.newgame.error") + " " + e.toString();
-                }
-                //}
-                //else {
-                //	output=resb.getString( "core.newgame.alreadyloaded");
-                //}
+            	try {
+            		game = new RiskGame();
+            		unlimitedLocalMode = true;
+            		controller.newGame(true);
+            		setupPreviews( doesMapHaveMission() );
+            		output=resb.getString( "core.newgame.created");
+            	}
+            	catch (Exception e) {
+            		//RiskUtil.printStackTrace(e);
+            		output=resb.getString( "core.newgame.error") + " " + e.toString();
+            	}
             }
             else { output=RiskUtil.replaceAll(resb.getString( "core.error.syntax"), "{0}", "newgame"); }
 
@@ -505,8 +521,8 @@ public class Risk extends Thread {
                 try {
                     game = RiskGame.loadGame( filename );
 
-                    if (game == null) {
-                        throw new Exception("no game");
+                    while (game == null) {
+                        throw new Exception("no game");                      
                     }
 
                     unlimitedLocalMode = true;
@@ -761,7 +777,7 @@ public class Risk extends Thread {
 
                 if ( patc.getAddress().equals(id) ) {
 
-                    if ( patc.getType() == Player.PLAYER_HUMAN ) {
+                    while ( patc.getType() == Player.PLAYER_HUMAN ) {
 
                         output = output + patc.getName()+" ";
 
@@ -783,6 +799,7 @@ public class Risk extends Thread {
                             patc.setType( Player.PLAYER_AI_CRAP );
 
                         }
+                        break;
                     }
 
                     if (patc!=null) {
@@ -1035,13 +1052,16 @@ public class Risk extends Thread {
             String newName = (String)map.get("newName");
             String newAddress = (String)map.get("newAddress");
             int newType = Integer.parseInt((String)map.get("newType"));
-
+            
+            renamePlayer(oldName,newName,newAddress,newType);
+            /*
             try {
                 renamePlayer(oldName,newName,newAddress,newType);
             }
             catch (Exception ex) {
                 ex.printStackTrace();
             }
+            */
         }
         else { // parse this normal cammand
 
@@ -1292,7 +1312,9 @@ public class Risk extends Thread {
                             if ( newgame_type!=-1 && newgame_cardType!=-1 && n>=2 && n<=RiskGame.MAX_PLAYERS) {
 
                                 autoplaceall = newgame_autoplaceall;
-
+                                
+                                game.startGame(newgame_type,newgame_cardType,newgame_recycle,threeDice);
+                                /*
                                 try {
 
                                     game.startGame(newgame_type,newgame_cardType,newgame_recycle,threeDice);
@@ -1303,6 +1325,7 @@ public class Risk extends Thread {
                                     RiskUtil.printStackTrace(e);
 
                                 }
+                                */
 
                             }
 
@@ -1407,35 +1430,41 @@ public class Risk extends Thread {
                                     bufferin=in;
 
                                 }
-
+                                
                                 public void run() {
-
-                                    try {
-
+                                	// try and catch
                                         String input = bufferin.readLine();
                                         while(input != null) {
-
                                             //System.out.print(input+"\n");
-
                                             risk.inGameParser(input);
                                             input = bufferin.readLine();
-
                                         }
-
                                         bufferin.close();
-
-                                    }
-                                    catch(Exception error) {
-
-                                        RiskUtil.printStackTrace(error);
-
-                                    }
-
                                     //set replay off
                                     replay = false;
                                     getInput();
                                 }
-
+                                
+                                /* try and catch
+                                public void run1() {
+                                	// try and catch
+                                    try {
+                                        String input = bufferin.readLine();
+                                        while(input != null) {
+                                            //System.out.print(input+"\n");
+                                            risk.inGameParser(input);
+                                            input = bufferin.readLine();
+                                        }
+                                        bufferin.close();
+                                    }
+                                    catch(Exception error) {
+                                        RiskUtil.printStackTrace(error);
+                                    }
+                                    //set replay off
+                                    replay = false;
+                                    getInput();
+                                }
+                                */
                             }
 
                             Thread replaythread = new Replay(this, bufferin);
@@ -2081,11 +2110,13 @@ public class Risk extends Thread {
                 controller.sendMessage(output, true, true );
             }
             else if (game.getState()==RiskGame.STATE_END_TURN) {
-                if ( game.getCurrentPlayer().getAutoEndGo() ) {
+                while ( game.getCurrentPlayer().getAutoEndGo() ) {
                     controller.sendMessage(output, false, false );
+                    break;
                 }
-                else {
+                while (!(game.getCurrentPlayer().getAutoEndGo() )) {
                     controller.sendMessage(output, true, true );
+                    break;
                 }
             }
             else {// if player type is human or neutral or ai
@@ -2246,7 +2277,7 @@ public class Risk extends Thread {
                 // yura:lobby taken out: || ((Player)game.getCurrentPlayer()).getAddress().equals("all")
 
                 // IF local game, OR addres match get input
-                if ( unlimitedLocalMode || ((Player)game.getCurrentPlayer()).getAddress().equals(myAddress) ) {
+                while ( unlimitedLocalMode || ((Player)game.getCurrentPlayer()).getAddress().equals(myAddress) ) {
 
                     if ( game.getState() == RiskGame.STATE_DEFEND_YOURSELF && game.getCurrentPlayer().getAutoDefend() ) {
 
@@ -2266,7 +2297,7 @@ public class Risk extends Thread {
                         ai.play(this);
 
                     }
-
+                    break;
                 }
                 //else if ( game.getCurrentPlayer().getType()==Player.PLAYER_HUMAN ) {
 
@@ -2354,11 +2385,18 @@ public class Risk extends Thread {
         }
         else if (game.getState()==RiskGame.STATE_PLACE_ARMIES) {
 
-            if ( game.getSetupDone() ) { help = help + resb.getString( "core.help.placearmies"); }
+            while( game.getSetupDone() ) { help = help + resb.getString( "core.help.placearmies");
+            break;
+            }
 
-            else if ( game.NoEmptyCountries() ) { help = help + resb.getString( "core.help.placearmy"); }
+            while( game.NoEmptyCountries() ) { help = help + resb.getString( "core.help.placearmy");
+            break;
+            }
 
-            else { help = help + resb.getString( "core.help.placearmyempty"); }
+            while((!(game.getSetupDone() )) && ( !(game.NoEmptyCountries() )))
+            	{ help = help + resb.getString( "core.help.placearmyempty");
+           	break;
+           }
 
         }
         else if (game.getState()==RiskGame.STATE_ATTACKING) {
@@ -2798,14 +2836,17 @@ public class Risk extends Thread {
     public void newMemoryGame(RiskGame g, String map) {
 
         closeGame();
-
+        
         try {
             // make a copy
 
-            javax.crypto.NullCipher nullCipher = new javax.crypto.NullCipher();
-
-            // @TODO, this will crash on macs
-            game = (RiskGame) (new javax.crypto.SealedObject( g, nullCipher ).getObject( nullCipher ));
+            //javax.crypto.NullCipher nullCipher = new javax.crypto.NullCipher();
+        	
+        	Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); //OK
+        	
+			// @TODO, this will crash on macs
+            game = (RiskGame) 
+            		(new javax.crypto.SealedObject( g, chiper ).getObject( chiper ));
             game.loadMap(false, new BufferedReader(new StringReader(map)));
 
             for (int c=1;c<=RiskGame.MAX_PLAYERS;c++) {

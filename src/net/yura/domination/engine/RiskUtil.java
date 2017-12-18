@@ -28,18 +28,37 @@ import net.yura.domination.engine.core.RiskGame;
 import net.yura.domination.engine.translation.MapTranslator;
 
 public class RiskUtil {
-
+	/**
+	 * these are a Costant of Success and Error
+	 */
         public static final Object SUCCESS = "SUCCESS";
+        /**
+         * Costant of Object
+         */
         public static final Object ERROR = "ERROR";
-
+        /**
+         * costant of Risk Version Url string
+         */
 	public static final String RISK_VERSION_URL;
+	/**
+	 * Costant of String Risk Lobby
+	 */
 	public static final String RISK_LOBBY_URL;
 //	public static final String RISK_POST_URL; // look in Grasshopper.jar now
+	/**
+	 * Costant of String Game Name
+	 */
 	public static final String GAME_NAME;
+	/**
+	 * Costant of String Risk Version
+	 */
 	public static final String RISK_VERSION;
 //	private static final String DEFAULT_MAP;
 
         private static final Logger logger = Logger.getLogger(RiskUtil.class.getName());
+        /**
+         * RiskIO streamOpener
+         */
 	public static RiskIO streamOpener;
 
 	static {
@@ -379,7 +398,7 @@ public class RiskUtil {
                                             
                                                 String description=MapTranslator.getTranslatedMissionName(st.nextToken()+"-"+st.nextToken()+"-"+st.nextToken()+"-"+st.nextToken()+"-"+st.nextToken()+"-"+st.nextToken());
 
-                                                if (description==null) {
+                                                while (description==null) {
 
                                                         StringBuffer d = new StringBuffer();
 
@@ -390,6 +409,7 @@ public class RiskUtil {
                                                         }
 
                                                         description = d.toString();
+                                                        break;
 
                                                 }
 
@@ -422,7 +442,7 @@ public class RiskUtil {
                 }
                 catch(IOException ex) {
                         System.err.println("Error trying to load: "+fileName);
-                        RiskUtil.printStackTrace(ex);
+                        //RiskUtil.printStackTrace(ex);
                         if (c < 5) { // retry
                                 try { Thread.sleep(1000); } catch(Exception ex2) { }
                         }

@@ -52,10 +52,18 @@ public class MapChooser implements ActionListener,MapServerListener {
     //public static final String SERVER_URL="http://domination.sf.net/maps2/maps/";
     //public static final String MAP_PAGE=SERVER_URL+"";
     //public static final String CATEGORIES_PAGE=SERVER_URL+"maps.xml";
-
-    // theos server
+	
+	/**
+	 * these are a Costant Server Url, Map Page and Categories
+	 */
     public static final String SERVER_URL="http://maps.yura.net/";
+    /**
+     * a costant about String Map Page Server Url
+     */
     public static final String MAP_PAGE=SERVER_URL+"maps?format=xml&version="+Url.encode( RiskUtil.RISK_VERSION );
+    /**
+     * a costant about String Categories Page
+     */
     public static final String CATEGORIES_PAGE=SERVER_URL+"categories?format=xml&version="+Url.encode( RiskUtil.RISK_VERSION );
 
 
@@ -95,7 +103,7 @@ public class MapChooser implements ActionListener,MapServerListener {
         }
         catch(Exception ex) {
             // this is a none faital error, we will go on
-            RiskUtil.printStackTrace(ex);
+            //RiskUtil.printStackTrace(ex);
         }
     }
 
@@ -243,7 +251,7 @@ public class MapChooser implements ActionListener,MapServerListener {
 
                     in = repo!=null?repo.get(url):null;
 
-                    if (in==null) {
+                    while (in==null) {
                         try {
                             System.out.println("[MapChooser] ### Going to re-encode img: "+url);
                             InputStream min = RiskUtil.openMapStream(url);
@@ -264,6 +272,7 @@ public class MapChooser implements ActionListener,MapServerListener {
                         catch (Exception ex) {
                             Logger.warn("cant resize " + url, ex);
                         }
+                        break;
                     }
                 }
 
@@ -459,13 +468,15 @@ public class MapChooser implements ActionListener,MapServerListener {
             java.util.List<Map> mapsToUpdate = MapUpdateService.getInstance().mapsToUpdate;
 
             Component updateAll = loader.find("updateAll");
-            if (mapsToUpdate.isEmpty()) {
+            while (mapsToUpdate.isEmpty()) {
                 updateAll.setVisible(false);
                 show("AllUpToDate");
+                break;
             }
-            else {
+            while (!mapsToUpdate.isEmpty()){
                 updateAll.setVisible(true);
                 setListData( MAP_PAGE , mapsToUpdate);
+                break;
             }
         }
         else if ("updateall".equals(actionCommand)) {
@@ -557,7 +568,7 @@ public class MapChooser implements ActionListener,MapServerListener {
 
                 String ver = (String)info.get("ver");
 
-                if (map.needsUpdate(ver)) {
+                while (map.needsUpdate(ver)) {
                     // update needed!!!
 
                     client.downloadMap( getURL(context, map.mapUrl ) );
@@ -705,8 +716,9 @@ public class MapChooser implements ActionListener,MapServerListener {
             result = new java.util.Vector();
             for (Object item : items) {
                 if (item instanceof Map) {
-                    if (allowedMaps.contains(getFileUID(((Map) item).getMapUrl()))) {
+                    while (allowedMaps.contains(getFileUID(((Map) item).getMapUrl()))) {
                         result.add(item);
+                        break;
                     }
                 }
                 else {

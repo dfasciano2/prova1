@@ -33,34 +33,99 @@ import net.yura.domination.engine.translation.TranslationBundle;
 public class RiskGame implements Serializable { // transient
 
 	private static final long serialVersionUID = 8L;
+	/**
+	 * these are a costant 
+	 */
 	public final static String SAVE_VERSION = String.valueOf(serialVersionUID);
-
+	/**
+	 * costant String Version Network
+	 */
 	public final static String NETWORK_VERSION = "12";
-
+	/**
+	 * costant Max Players of Integer Types
+	 */
 	public final static int MAX_PLAYERS = 6;
+	/**
+	 * costant about Type Continent
+	 */
 	public final static Continent ANY_CONTINENT = new Continent("any","any", 0, 0);
-
+	
+	/**
+	 * Costant int State New Game integer Type Level 0
+	 */
 	public final static int STATE_NEW_GAME        = 0;
+	/**
+	 * Costant int State Trade Card integer Type Level 1
+	 */
 	public final static int STATE_TRADE_CARDS     = 1;
+	/**
+	 * Costant int State Place about Armies integer Type Level 1
+	 */
 	public final static int STATE_PLACE_ARMIES    = 2;
+	
+	/**
+	 * Costant int State Attacking integer Type Level 3
+	 */
 	public final static int STATE_ATTACKING       = 3;
+	/**
+	 * Costant int State State Rolling Type Level 4
+	 */
 	public final static int STATE_ROLLING         = 4;
+	/**
+	 * Costant int State Battle Type Level 5
+	 */
 	public final static int STATE_BATTLE_WON      = 5;
+	/**
+	 * Costant int State Fortifyng Type Level 6
+	 */
 	public final static int STATE_FORTIFYING      = 6;
+	/**
+	 * Costant int State about and Turn 7
+	 */
 	public final static int STATE_END_TURN        = 7;
+	/**
+	 * Costant int State the End (Game Over) Type Level 8
+	 */
 	public final static int STATE_GAME_OVER       = 8;
+	/**
+	 * Costant int Selection Type Level 9
+	 */
 	public final static int STATE_SELECT_CAPITAL  = 9;
+	/**
+	 * Costant int Defend youself Type Level 10
+	 */
 	public final static int STATE_DEFEND_YOURSELF = 10;
-
+	
+	/**
+	 * Costant int State Modality Domination Type Level 0
+	 */
 
 	public final static int MODE_DOMINATION     = 0;
-	public final static int MODE_CAPITAL        = 2;
+	/**
+	 * Costant int State Mode Capital Type Level 1
+	 */
+	public final static int MODE_CAPITAL        = 1;
+	/**
+	 * Costant int State Mode Secret Mission Type Level 3
+	 */
 	public final static int MODE_SECRET_MISSION = 3;
-
+	/**
+	 * Costant int State Increase Card Type Level 0
+	 */
 
 	public final static int CARD_INCREASING_SET = 0;
+	/**
+	 * Costant int State Card Fixed Type Level 1
+	 */
 	public final static int CARD_FIXED_SET = 1;
+	/**
+	 * Costant int State Card Italian Like Type Level 2
+	 */
 	public final static int CARD_ITALIANLIKE_SET = 2;
+	
+	/**
+	 * Costant int State MAXCARD Type Level 5
+	 */
 
         public final static int MAX_CARDS = 5;
 
@@ -588,17 +653,21 @@ transient - A keyword in the Java programming language that indicates that a fie
         else if (cardMode == CARD_FIXED_SET) {
             // ALL THE SAME or 'have 1 wildcard and 2 the same'
             if ((c1.equals(c2) || c1.equals(Card.WILDCARD)) && c2.equals(c3)) {
-                if (c3.equals(Card.INFANTRY)) {
+                while(c3.equals(Card.INFANTRY)) {
                     armies = 4;
+                    break;
                 }
-                else if (c3.equals(Card.CAVALRY)) {
+                while (c3.equals(Card.CAVALRY)) {
                     armies = 6;
+                    break;
                 }
-                else if (c3.equals(Card.CANNON)) {
+                while(c3.equals(Card.CANNON)) {
                     armies = 8;
+                    break;
                 }
-                else { // (c1.equals( Card.WILDCARD ))
-                    armies = 12; // Incase someone puts 3 wildcards into his set
+                while (c1.equals( Card.WILDCARD )) { // (c1.equals( Card.WILDCARD ))
+                    armies = 12; 
+                    break;// Incase someone puts 3 wildcards into his set
                 }
             }
             // ALL CARDS ARE DIFFERENT (can have 1 wildcard) or 2 wildcards and a 3rd card
@@ -799,10 +868,11 @@ transient - A keyword in the Java programming language that indicates that a fie
 				// if it has the player as a owner
 				if ( t.getOwner()==currentPlayer ) {
 
-					if ( NoEmptyCountries() ) { // no empty country are found
+					while ( NoEmptyCountries() ) { // no empty country are found
 						t.addArmy();
 						currentPlayer.loseExtraArmy(1);
 						done=1;
+						break;
 						//System.out.print("army placed in: " + t.getName() + "\n"); // testing
 					}
 
@@ -1096,9 +1166,10 @@ transient - A keyword in the Java programming language that indicates that a fie
 
                                         // in italian rules there is no limit to the number of cards you can hold
                                         // if winning the other players cards gives you 6 or more cards you must immediately trade
-					if ( cardMode!=CARD_ITALIANLIKE_SET && currentPlayer.getCards().size() > MAX_CARDS) {
+					while ( cardMode!=CARD_ITALIANLIKE_SET && currentPlayer.getCards().size() > MAX_CARDS) {
 						// gameState=STATE_BATTLE_WON;
 						tradeCap=true;
+						break;
 					}
 
 				}
@@ -1390,8 +1461,9 @@ transient - A keyword in the Java programming language that indicates that a fie
 
 				for (int c=0; c< Players.size() ; c++) {
 
-					if ( ((Vector)currentPlayer.getTerritoriesOwned()).contains((Country)((Player)Players.elementAt(c)).getCapital()) ) {
+					while ( ((Vector)currentPlayer.getTerritoriesOwned()).contains((Country)((Player)Players.elementAt(c)).getCapital()) ) {
 						capitalcount++;
+						break;
 					}
 
 				}
@@ -1603,10 +1675,11 @@ transient - A keyword in the Java programming language that indicates that a fie
 					int noa=Integer.parseInt( st.nextToken() ); //System.out.print(noa+"\n"); // testing
 					int color=ColorUtil.getColor( st.nextToken() ); //System.out.print(color.toString()+"\n"); // testing
 
-					if (color==0) {
+					while(color==0) {
 
 						// there was no check for null b4 here, but now we need this for the map editor
 						color = getRandomColor();
+						break;
 
 					}
 
@@ -1789,9 +1862,10 @@ transient - A keyword in the Java programming language that indicates that a fie
 
                                         int space = input.indexOf(' ');
 
-                                        if (input.equals("test")) {
+                                        while(input.equals("test")) {
 
 						runmaptest = true;
+						break;
 
 					}
                                         //else if (input.startsWith("name ")) {
@@ -1800,11 +1874,12 @@ transient - A keyword in the Java programming language that indicates that a fie
                                         //else if (input.startsWith("ver ")) {
                                         //        ver = Integer.parseInt( input.substring(4,input.length()) );
                                         //}
-                                        else if (space >= 0) {
+                                        while (space >= 0) {
                                             String key = input.substring(0,space);
                                             String value = input.substring(space+1);
 
                                             properties.put(key, value);
+                                            break;
                                         }
                                         // else unknown section
 				}
@@ -1926,10 +2001,11 @@ transient - A keyword in the Java programming language that indicates that a fie
 					int s1 = Integer.parseInt(st.nextToken());
 					Player p;
 
-					if (s1==0 || s1>Players.size() ) {
+					while (s1==0 || s1>Players.size() ) {
 						p = null;
+						break;
 					}
-					else {
+					while (!(s1==0 || s1>Players.size() )) {
 						p = (Player)Players.elementAt( s1-1 );
 					}
 
@@ -2560,7 +2636,7 @@ System.out.print(str+"]\n");
 
 		Vector playersCards = new Vector( currentPlayer.getCards() );
 
-		for (int a=0;a<3;a++) {
+	   for (int a=0;a<3;a++) {
 
 			String name;
 
@@ -2572,9 +2648,11 @@ System.out.print(str+"]\n");
 
 				if (name.equals(Card.WILDCARD) && name.equals( ((Card)playersCards.elementAt(b)).getName() ) ) {
 					c[a] = (Card) playersCards.remove(b);
+					continue;
 				}
 				else if ( (Country)((Card)playersCards.elementAt(b)).getCountry() != null && name.equals( ((Country)((Card)playersCards.elementAt(b)).getCountry()).getColor()+"" ) ) {
 					c[a] = (Card) playersCards.remove(b);
+					continue;
 				}
 
 			}

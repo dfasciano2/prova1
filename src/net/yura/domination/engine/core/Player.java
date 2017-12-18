@@ -17,11 +17,25 @@ import net.yura.domination.engine.core.StatType;
 public class Player implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * these are a Costant Player
+	 */
 	public final static int PLAYER_HUMAN   = 0;
+	/**
+	 * costant about base player
+	 */
 	public final static int PLAYER_AI_CRAP = 3;
+	/**
+	 * Costant about Level 1 Player
+	 */
 	public final static int PLAYER_AI_EASY = 1;
+	/**
+	 * costant about player Hard level 2
+	 */
 	public final static int PLAYER_AI_HARD = 2;
+	/**
+	 * costant about Player Average
+	 */
 	public static final int PLAYER_AI_AVERAGE = 4;
 
 

@@ -30,7 +30,11 @@ public class RiskController {
     public void addListener(RiskListener o) {
         synchronized(this) {
             if (o == null)
-                throw new NullPointerException();
+            	/*
+            	 * delete throw new NullPointerException();
+            	 */
+                //throw new NullPointerException();
+            	throw new Error();
             if (!obs.contains(o)) {
                 obs.addElement(o);
             }
@@ -62,7 +66,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).sendMessage(output,redrawNeeded,repaintNeeded);
+        /* Prefer not user the Try and Catch
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).sendMessage(output,redrawNeeded,repaintNeeded);
@@ -70,6 +77,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void needInput(int s) {
@@ -79,7 +87,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).needInput(s);
+        
+        /* Try and Catch
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).needInput(s);
@@ -87,6 +99,8 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
+        
     }
 
     public void noInput() {
@@ -96,7 +110,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).noInput();
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).noInput();
@@ -104,6 +121,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void setGameStatus(String state) {
@@ -113,6 +131,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).setGameStatus(state);
+        
+        /*
 
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
@@ -121,6 +144,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void newGame(boolean t) {
@@ -130,7 +154,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).newGame(t);
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).newGame(t);
@@ -138,6 +165,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void startGame(boolean s) {
@@ -147,7 +175,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).startGame(s);
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).startGame(s);
@@ -155,6 +186,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void closeGame() {
@@ -164,7 +196,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).closeGame();
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).closeGame();
@@ -172,6 +207,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
 //    public void setSlider(int min, int c1num, int c2num) {
@@ -232,7 +268,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).showMapPic(p);
+        
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).showMapPic(p);
@@ -240,6 +280,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void showCardsFile(String c, boolean m) {
@@ -249,7 +290,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).showCardsFile(c, m);
+        
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).showCardsFile(c, m);
@@ -257,6 +302,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void serverState(boolean s) {
@@ -266,7 +312,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).serverState(s);
+        
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).serverState(s);
@@ -274,6 +324,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void openBattle(int c1num, int c2num) {
@@ -283,7 +334,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).openBattle(c1num,c2num);
+        
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).openBattle(c1num,c2num);
@@ -291,6 +346,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void closeBattle() {
@@ -300,7 +356,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).closeBattle();
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).closeBattle();
@@ -308,6 +367,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void addPlayer(int type, String name, int color, String ip) {
@@ -317,7 +377,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).addPlayer(type, name, color, ip);
+        
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).addPlayer(type, name, color, ip);
@@ -325,6 +389,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void delPlayer(String name) {
@@ -334,7 +399,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).delPlayer(name);
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).delPlayer(name);
@@ -342,6 +410,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void showDiceResults(int[] att, int[] def) {
@@ -351,7 +420,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).showDiceResults(att,def);
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).showDiceResults(att,def);
@@ -359,6 +431,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void setNODAttacker(int n) {
@@ -368,7 +441,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).setNODAttacker(n);
 
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).setNODAttacker(n);
@@ -376,6 +453,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void setNODDefender(int n) {
@@ -385,7 +463,11 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).setNODDefender(n);
+        
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).setNODDefender(n);
@@ -393,6 +475,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void sendDebug(String a) {
@@ -402,7 +485,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).sendDebug(a);
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).sendDebug(a);
@@ -410,6 +496,7 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 
     public void showMessageDialog(String a) {
@@ -419,7 +506,10 @@ public class RiskController {
         synchronized (this) {
             arrLocal = obs.toArray();
         }
-
+        
+        for (int i = arrLocal.length-1; i>=0; i--)
+            ((RiskListener)arrLocal[i]).showMessageDialog(a);
+        /*
         try {
             for (int i = arrLocal.length-1; i>=0; i--)
                 ((RiskListener)arrLocal[i]).showMessageDialog(a);
@@ -427,5 +517,6 @@ public class RiskController {
         catch(Exception ex) {
             RiskUtil.printStackTrace(ex);
         }
+        */
     }
 }
