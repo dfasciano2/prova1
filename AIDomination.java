@@ -446,6 +446,7 @@ public class AIDomination extends AISubmissive {
 	}
 
 	private attack2 (boolean attack) {
+		List<Country> attackable = findAttackableTerritories(player, attack);
 		if (attack && (game.getCurrentPlayer().getStatistics().size() > MAX_AI_TURNS && (gameState.me.playerValue < gameState.orderedPlayers.get(gameState.orderedPlayers.size() - 1).playerValue || r.nextBoolean()))) {
 		boolean keepPlaying = false;
 		for (int i = 0; i < game.getPlayers().size(); i++) {
@@ -467,6 +468,7 @@ public class AIDomination extends AISubmissive {
 	}
 	
 	private attack3(boolean attack) {
+		List<Country> attackable = findAttackableTerritories(player, attack);
 		if (attack && player.getType() == PLAYER_AI_EASY && game.getMaxDefendDice() == 2 && game.isCapturedCountry() && r.nextBoolean()) {
 		ArrayList<AttackTarget> targetList = new ArrayList<AIDomination.AttackTarget>(targets.values());
 		Collections.sort(targetList, Collections.reverseOrder());
