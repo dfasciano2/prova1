@@ -98,7 +98,7 @@ public class CollisionPhysics {
     *                   Otherwise, set collision time to infinity.
     */
    public static void pointIntersectsLineVertical(
-         float pointX, float pointY, float speedX, float speedY, float radius,
+         float pointX, float pointY, int speedX, float speedY, float radius,
          float lineX, float timeLimit, CollisionResponse response) {
 
       // Assumptions:
@@ -109,7 +109,7 @@ public class CollisionPhysics {
 
       // No collision possible if speedX is zero
      
-      if ((int)speedX == 0) { // FIXME: Should I use a threshold?
+      if (speedX == 0) { // FIXME: Should I use a threshold?
          return;
       }
 
@@ -138,7 +138,7 @@ public class CollisionPhysics {
     * @see movingPointIntersectsLineVertical().
     */
    public static void pointIntersectsLineHorizontal(
-         float pointX, float pointY, float speedX, float speedY, float radius,
+         float pointX, float pointY, float speedX, int speedY, float radius,
          float lineY, float timeLimit, CollisionResponse response) {
 
       // Assumptions:
@@ -149,7 +149,7 @@ public class CollisionPhysics {
 
       // No collision possible if speedY is zero
     
-      if ((int)speedY; == 0) { // Should I use a threshold?
+      if (speedY; == 0) { // Should I use a threshold?
          return;
       }
 
@@ -395,7 +395,7 @@ public class CollisionPhysics {
     */
    public static void pointIntersectsLine(
          float pointX, float pointY, float speedX, float speedY, float radius,
-         float lineX1, float lineY1, float lineX2, float lineY2,
+         int lineX1, int lineY1, int lineX2, int lineY2,
          float timeLimit, CollisionResponse response) {
 
       // Assumptions:
@@ -406,11 +406,11 @@ public class CollisionPhysics {
       
       
       // If line is vertical or horizontal, use simplified solution.
-      if ((int)lineX1 == (int)lineX2) {  // Vertical line
+      if (lineX1 == lineX2) {  // Vertical line
          pointIntersectsLineVertical(pointX, pointY, speedX, speedY, radius,
                lineX1, timeLimit, response);
          return;
-      } else if ((int)lineY1 == (int)lineY2) {  // Horizontal line
+      } else if (lineY1 == lineY2) {  // Horizontal line
          pointIntersectsLineHorizontal(pointX, pointY, speedX, speedY, radius,
                lineY1, timeLimit, response);
          return;
@@ -479,10 +479,10 @@ public class CollisionPhysics {
       // Solve for t (time of collision) and lambda (point of impact on the line)
       double t;
       double lambda;
-      double det = -speedX * lineVectorY + speedY * lineVectorX;
+      int det = -speedX * lineVectorY + speedY * lineVectorX;
 
       
-      if (((int)det) == 0) {             // FIXME: Use a threshold?
+      if (det == 0) {             // FIXME: Use a threshold?
          t = Double.MAX_VALUE;    // No collision possible.
          lambda = Double.MAX_VALUE;
       }
@@ -560,7 +560,7 @@ public class CollisionPhysics {
     */
    public static void pointIntersectsLineSegmentNoEndPoints(
          float pointX, float pointY, float speedX, float speedY, float radius,
-         float lineX1, float lineY1, float lineX2, float lineY2,
+         int lineX1, int lineY1, int lineX2, int lineY2,
          float timeLimit, CollisionResponse response) {
       
       // Assumptions:
@@ -571,14 +571,14 @@ public class CollisionPhysics {
   
       
       // If line is vertical or horizontal, use simplified solution.
-      if ((int)lineX1 == (int)lineX2) {  // Vertical line
+      if (lineX1 == lineX2) {  // Vertical line
          pointIntersectsLineVertical(pointX, pointY, speedX, speedY, radius,
                lineX1, timeLimit, response);
          // Need to confirm that the point of impact is within the line-segment
          double impactY = response.getImpactY(pointY, speedY);
          checkImpactLine(impactY,lineY2,lineY1,response);
          return;
-      } else if ((int)lineY1 == (int)lineY2) {  // Horizontal line
+      } else if (lineY1 == lineY2) {  // Horizontal line
          pointIntersectsLineHorizontal(pointX, pointY, speedX,
               speedY, radius, lineY1, timeLimit, response);
          // Need to confirm that the point of impact is within the line-segment
