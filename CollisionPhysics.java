@@ -108,7 +108,6 @@ public class CollisionPhysics {
       response.reset();  // Reset detected collision time to infinity
 
       // No collision possible if speedX is zero
-     
       if (speedX == 0) { // FIXME: Should I use a threshold?
          return;
       }
@@ -138,7 +137,7 @@ public class CollisionPhysics {
     * @see movingPointIntersectsLineVertical().
     */
    public static void pointIntersectsLineHorizontal(
-         float pointX, float pointY, float speedX, int speedY, float radius,
+         float pointX, float pointY, float speedX, float speedY, float radius,
          float lineY, float timeLimit, CollisionResponse response) {
 
       // Assumptions:
@@ -148,8 +147,7 @@ public class CollisionPhysics {
       response.reset();  // Reset detected collision time to infinity
 
       // No collision possible if speedY is zero
-    
-      if (speedY; == 0) { // Should I use a threshold?
+      if (speedY == 0) { // Should I use a threshold?
          return;
       }
 
@@ -264,9 +262,9 @@ public class CollisionPhysics {
       if (sol1 > 0 && sol2 > 0) {
          return (float)Math.min(sol1, sol2);
       } else if (sol1 > 0) {
-         return (double)sol1;
+         return (float)sol1;
       } else if (sol2 > 0) {
-         return (double)sol2;
+         return (float)sol2;
       } else {
          return Float.MAX_VALUE;
       }
@@ -395,16 +393,14 @@ public class CollisionPhysics {
     */
    public static void pointIntersectsLine(
          float pointX, float pointY, float speedX, float speedY, float radius,
-         int lineX1, int lineY1, int lineX2, int lineY2,
+         float lineX1, float lineY1, float lineX2, float lineY2,
          float timeLimit, CollisionResponse response) {
 
       // Assumptions:
       assert (radius >= 0) : "Negative radius!";
       assert (timeLimit > 0) : "Non-positive time";
       // lineX1 == lineX2 && lineY1 == lineY2, a point?
-      
-      
-      
+
       // If line is vertical or horizontal, use simplified solution.
       if (lineX1 == lineX2) {  // Vertical line
          pointIntersectsLineVertical(pointX, pointY, speedX, speedY, radius,
@@ -479,9 +475,8 @@ public class CollisionPhysics {
       // Solve for t (time of collision) and lambda (point of impact on the line)
       double t;
       double lambda;
-      int det = -speedX * lineVectorY + speedY * lineVectorX;
+      double det = -speedX * lineVectorY + speedY * lineVectorX;
 
-      
       if (det == 0) {             // FIXME: Use a threshold?
          t = Double.MAX_VALUE;    // No collision possible.
          lambda = Double.MAX_VALUE;
@@ -560,16 +555,14 @@ public class CollisionPhysics {
     */
    public static void pointIntersectsLineSegmentNoEndPoints(
          float pointX, float pointY, float speedX, float speedY, float radius,
-         int lineX1, int lineY1, int lineX2, int lineY2,
+         float lineX1, float lineY1, float lineX2, float lineY2,
          float timeLimit, CollisionResponse response) {
       
       // Assumptions:
       assert (radius >= 0) : "Negative radius!";
       assert (timeLimit > 0) : "Non-positive time";
       // lineX1 == lineX2 && lineY1 == lineY2, a point?
-      
-  
-      
+
       // If line is vertical or horizontal, use simplified solution.
       if (lineX1 == lineX2) {  // Vertical line
          pointIntersectsLineVertical(pointX, pointY, speedX, speedY, radius,
@@ -771,9 +764,9 @@ public class CollisionPhysics {
       if (sol1 > 0 && sol2 > 0) {
          return (float)Math.min(sol1, sol2);
       } else if (sol1 > 0) {
-         return (double)sol1;
+         return (float)sol1;
       } else if (sol2 > 0) {
-         return (double)sol2;
+         return (float)sol2;
       } else {
          // No positive t solution. Set detected collision time to infinity.
          return Float.MAX_VALUE;
