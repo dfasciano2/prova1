@@ -113,9 +113,12 @@ public class Cache {
             }
             catch (FileNotFoundException ex) {
                 System.err.println("RuntimeException(ex)");
+<<<<<<< HEAD
             }
             finally {
             	return new FileInputStream(file);
+=======
+>>>>>>> 2290264b552aa68c481db9320ffc4f67e1ba5c6f
             }
         }
         else {
