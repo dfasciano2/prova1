@@ -69,9 +69,7 @@ public class Cache {
                     logger.info("Going to make dir "+cacheDir);
                     checkCacheDir();
                 }
-                FileOutputStream out = new FileOutputStream(file);
-                out.write(value);
-                out.close();
+                
             }
             catch (Exception ex) {
                 boolean exists = file.exists();
@@ -88,6 +86,12 @@ public class Cache {
                                 " exists="+cacheDir.exists()+
                                 " isDir="+cacheDir.isDirectory(), ex);
             }
+        }
+        finally
+        {
+        	FileOutputStream out = new FileOutputStream(file);
+            out.write(value);
+            out.close();
         }
     }
     private void checkCacheDir() {
@@ -109,6 +113,9 @@ public class Cache {
             }
             catch (FileNotFoundException ex) {
                 System.err.println("RuntimeException(ex)");
+            }
+            finally {
+            	return new FileInputStream(file);
             }
         }
         else {
